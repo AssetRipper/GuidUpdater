@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Licenses", "Licenses", "{87
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuidUpdater.ConsoleApp", "GuidUpdater.ConsoleApp\GuidUpdater.ConsoleApp.csproj", "{83C5B8CC-0DAD-4A58-9FD2-76D543DA86B4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuidUpdater.Tests", "GuidUpdater.Tests\GuidUpdater.Tests.csproj", "{FDB2BD1D-2A4C-4D07-81C0-1ED479EA4CC4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{83C5B8CC-0DAD-4A58-9FD2-76D543DA86B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83C5B8CC-0DAD-4A58-9FD2-76D543DA86B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83C5B8CC-0DAD-4A58-9FD2-76D543DA86B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDB2BD1D-2A4C-4D07-81C0-1ED479EA4CC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDB2BD1D-2A4C-4D07-81C0-1ED479EA4CC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDB2BD1D-2A4C-4D07-81C0-1ED479EA4CC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDB2BD1D-2A4C-4D07-81C0-1ED479EA4CC4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
