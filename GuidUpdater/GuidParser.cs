@@ -7,7 +7,7 @@ using YamlDotNet.RepresentationModel;
 
 namespace GuidUpdater;
 
-internal static class GuidParser
+public static class GuidParser
 {
     static readonly string[] ignoredFolders = new string[] { "CombinedMesh", "Scenes" };
     static readonly bool ignoreDirectoryMetaFiles = true;

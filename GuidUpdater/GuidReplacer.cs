@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GuidUpdater;
 
-internal static class GuidReplacer
+public static class GuidReplacer
 {
     private readonly static string[] ignoredFileExtensions = new string[] { ".cs", ".dll", ".shader", ".png", ".obj", ".fbx", ".blend", ".unity3d", ".otf", ".ttf", ".bytes", ".txt", ".json" };
     internal static void ReplaceGuids(string oldAssetsPath, Dictionary<string, string> conversionMap)

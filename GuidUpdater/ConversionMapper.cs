@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GuidUpdater;
 
-internal static class ConversionMapper
+public static class ConversionMapper
     {
         internal static Dictionary<string, string> MakeConversionMap(string oldAssetsPath, string newAssetsPath)
         {

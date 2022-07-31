@@ -7,7 +7,7 @@ using YamlDotNet.RepresentationModel;
 
 namespace GuidUpdater;
 
-internal static class TestClass
+public static class TestClass
     {
         static string transformYaml = @"
 Transform:

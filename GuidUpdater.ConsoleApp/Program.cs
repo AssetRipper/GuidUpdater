@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
-namespace GuidUpdater;
+namespace GuidUpdater.ConsoleApp;
 
 public class Program
 {
