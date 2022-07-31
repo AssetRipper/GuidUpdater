@@ -10,7 +10,7 @@ namespace GuidUpdater;
 public static class GuidReplacer
 {
     private readonly static string[] ignoredFileExtensions = new string[] { ".cs", ".dll", ".shader", ".png", ".obj", ".fbx", ".blend", ".unity3d", ".otf", ".ttf", ".bytes", ".txt", ".json" };
-    internal static void ReplaceGuids(string oldAssetsPath, Dictionary<string, string> conversionMap)
+    public static void ReplaceGuids(string oldAssetsPath, Dictionary<string, string> conversionMap)
     {
         ConcurrentDictionary<string, string> concurrentConversion = new ConcurrentDictionary<string, string>(conversionMap);
         List<Task> tasks = new List<Task>();

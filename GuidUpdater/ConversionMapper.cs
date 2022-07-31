@@ -5,7 +5,7 @@ namespace GuidUpdater;
 
 public static class ConversionMapper
     {
-        internal static Dictionary<string, string> MakeConversionMap(string oldAssetsPath, string newAssetsPath)
+        public static Dictionary<string, string> MakeConversionMap(string oldAssetsPath, string newAssetsPath)
         {
             //Relative path : guid string
             Dictionary<string, string> oldGuidMap = GuidParser.MakeGuidMap(oldAssetsPath);
