@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GuidUpdater
-{
-	internal static class ConversionMapper
+namespace GuidUpdater;
+
+internal static class ConversionMapper
     {
         internal static Dictionary<string, string> MakeConversionMap(string oldAssetsPath, string newAssetsPath)
         {
@@ -27,4 +27,3 @@ namespace GuidUpdater
             return conversionMap;
         }
     }
-}

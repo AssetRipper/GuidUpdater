@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using YamlDotNet.RepresentationModel;
 
-namespace GuidUpdater
-{
-	internal static class TestClass
+namespace GuidUpdater;
+
+internal static class TestClass
     {
         static string transformYaml = @"
 Transform:
@@ -112,4 +112,3 @@ DefaultImporter:
             return yaml.Documents;
         }
     }
-}
