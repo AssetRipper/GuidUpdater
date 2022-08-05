@@ -2,7 +2,7 @@
 
 namespace GuidUpdater.Tests;
 
-internal class YamlAssetParserTests
+internal class YamlLoaderTests
 {
 	[Test]
 	public void FileWithStrippedAssetsParseWithoutErrors()
@@ -15,7 +15,7 @@ Material:
 --- !u!22 &2100001 stripped
 Material:
   serializedVersion: 6";
-		IList<YamlDocument> documents = YamlAssetParser.ParseYamlStreamFromText(yamlText).Documents;
+		IList<YamlDocument> documents = YamlLoader.LoadAssetYamlStreamFromText(yamlText).Documents;
 		Assert.That(documents.Count, Is.EqualTo(2));
 		Assert.That(documents[1].RootNode.Anchor.Value, Is.EqualTo("2100001 stripped"));
 	}
