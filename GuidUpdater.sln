@@ -21,6 +21,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuidUpdater.ConsoleApp", "G
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuidUpdater.Tests", "GuidUpdater.Tests\GuidUpdater.Tests.csproj", "{FDB2BD1D-2A4C-4D07-81C0-1ED479EA4CC4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{D1CE6F16-1A04-443B-978A-6CB0276D6C5E}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\test.yml = .github\workflows\test.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +50,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{87391C72-1CD1-4660-9EC0-1B197672CD92} = {451B5360-73E5-4FE8-AE61-1F201322AC24}
+		{D1CE6F16-1A04-443B-978A-6CB0276D6C5E} = {451B5360-73E5-4FE8-AE61-1F201322AC24}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1EEA7030-FF13-42AE-875A-D1C0890A2A34}
