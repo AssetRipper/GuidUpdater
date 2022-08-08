@@ -6,12 +6,12 @@ guid: 12aec0e7dfcb8c64b833494b9e898aa3
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
-  userData: 
-  assetBundleName: 
-  assetBundleVariant: 
+  userData:
+  assetBundleName:
+  assetBundleVariant:
 ";
 	[Test]
-	public void CorrectlyParseGuid()
+	public void CorrectlyRecreateMetaFile()
 	{
 		MetaFile file = MetaFile.FromText(metaYaml);
 		Assert.That(file.Stream.SaveForUnity(), Is.EqualTo(metaYaml));

@@ -10,9 +10,9 @@ guid: 12aec0e7dfcb8c64b833494b9e898aa3
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
-  userData: 
-  assetBundleName: 
-  assetBundleVariant: 
+  userData:
+  assetBundleName:
+  assetBundleVariant:
 ";
 		UnityGuid guid = MetaFile.FromText(metaYaml).Guid;
 		Assert.That(guid.ToString(), Is.EqualTo("12aec0e7dfcb8c64b833494b9e898aa3"));
