@@ -78,6 +78,25 @@ public static class GuidReplacer
 		{
 			return false;
 		}
+		//todo: importer pptrs
+	}
+
+	private static void ReplaceAssetPPtrs(string path, UnityGuid oldMetaGuid)
+	{
+		AssetFile file = AssetFile.FromFile(path);
+		foreach (UnityAsset asset in file.Assets)
+		{
+			foreach (YamlPPtrNode node in asset.FindAllPPtrs())
+			{
+				PPtr pptr = node.PPtr;
+				if (pptr.IsReplaceable)
+				{
+					node.PPtr = IdentifierMap.GetNewPPtr(pptr.ToInterFile(oldMetaGuid));
+				}
+			}
+			PPtr assetPPtr = new PPtr(asset.FileID, oldMetaGuid, AssetType.Serialized);
+			asset.FileID = IdentifierMap.GetNewPPtr(assetPPtr).FileID;
+		}
 	}
 
 	private static bool HasGuid(string text)

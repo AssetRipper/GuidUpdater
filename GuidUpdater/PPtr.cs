@@ -22,7 +22,7 @@ public readonly record struct PPtr(long FileID, UnityGuid Guid, AssetType Type)
 	public PPtr ToInterFile(UnityGuid guid)
 	{
 		return IsIntraFile || Guid == guid 
-			? new PPtr(FileID, Type) 
+			? new PPtr(FileID, guid, Type) 
 			: throw new ArgumentException(null, nameof(guid));
 	}
 
@@ -45,4 +45,9 @@ public readonly record struct PPtr(long FileID, UnityGuid Guid, AssetType Type)
 	/// The <see cref="PPtr"/> references an asset within the same file.
 	/// </summary>
 	public bool IsIntraFile => Guid == UnityGuid.Zero;
+	
+	/// <summary>
+	/// Not null, internal, nor missing
+	/// </summary>
+	public bool IsReplaceable => !IsNull && !IsInternal && !IsMissing;
 }

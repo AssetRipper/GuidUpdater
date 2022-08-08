@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using YamlDotNet.RepresentationModel;
 
 namespace GuidUpdater;
@@ -61,5 +62,52 @@ internal static class YamlNodeExtensions
 	private static bool IsNonemptyScalarNode(this YamlNode node)
 	{
 		return node is YamlScalarNode scalarNode && !string.IsNullOrEmpty(scalarNode.Value);
+	}
+
+	public static IEnumerable<YamlPPtrNode> FindAllPPtrs(this YamlNode node)
+	{
+		if (node is YamlMappingNode mappingNode)
+		{
+			if (node.TryParseAsPPtr(out YamlPPtrNode pptr))
+			{
+				yield return pptr;
+			}
+			else
+			{
+				foreach (YamlPPtrNode returnedPPtr in FindAllPPtrs(mappingNode))
+				{
+					yield return returnedPPtr;
+				}
+			}
+		}
+		else if (node is YamlSequenceNode sequenceNode)
+		{
+			foreach (YamlPPtrNode returnedPPtr in FindAllPPtrs(sequenceNode))
+			{
+				yield return returnedPPtr;
+			}
+		}
+	}
+
+	private static IEnumerable<YamlPPtrNode> FindAllPPtrs(YamlMappingNode mappingNode)
+	{
+		foreach ((YamlNode _, YamlNode child) in mappingNode.Children)
+		{
+			foreach (YamlPPtrNode returnedPPtr in child.FindAllPPtrs())
+			{
+				yield return returnedPPtr;
+			}
+		}
+	}
+
+	private static IEnumerable<YamlPPtrNode> FindAllPPtrs(YamlSequenceNode mappingNode)
+	{
+		foreach (YamlNode child in mappingNode.Children)
+		{
+			foreach (YamlPPtrNode returnedPPtr in child.FindAllPPtrs())
+			{
+				yield return returnedPPtr;
+			}
+		}
 	}
 }

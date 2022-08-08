@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using YamlDotNet.RepresentationModel;
 
@@ -40,4 +41,6 @@ public readonly record struct AssetFile(YamlStream Stream)
 			}
 		}
 	}
+
+	public IEnumerable<UnityAsset> Assets => Stream.Documents.Select(document => new UnityAsset(document));
 }

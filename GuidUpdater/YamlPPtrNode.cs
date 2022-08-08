@@ -19,9 +19,10 @@ public readonly record struct YamlPPtrNode(YamlMappingNode RootNode, bool IntraF
 		}
 		set
 		{
-			GuidValueNode.Value = !IntraFile 
-				? value.ToString() 
-				: throw new Exception("Can't modify the guid of intra file pointers.");
+			if (!IntraFile)
+			{
+				GuidValueNode.Value = value.ToString();
+			}
 		}
 	}
 
@@ -33,9 +34,10 @@ public readonly record struct YamlPPtrNode(YamlMappingNode RootNode, bool IntraF
 		}
 		set
 		{
-			TypeValueNode.Value = !IntraFile
-				? ((byte)value).ToString()
-				: throw new Exception("Can't modify the guid of intra file pointers.");
+			if (!IntraFile)
+			{
+				TypeValueNode.Value = ((byte)value).ToString();
+			}
 		}
 	}
 
@@ -70,5 +72,17 @@ public readonly record struct YamlPPtrNode(YamlMappingNode RootNode, bool IntraF
 		}
 	}
 
-	public PPtr ToPPtr() => new PPtr(FileID, Guid, Type);
+	public PPtr PPtr
+	{
+		get
+		{
+			return new PPtr(FileID, Guid, Type);
+		}
+		set
+		{
+			FileID = value.FileID;
+			Guid = value.Guid;
+			Type = value.Type;
+		}
+	}
 }
