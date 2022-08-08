@@ -41,7 +41,7 @@ public static class GuidReplacer
 			meta.Guid = newGuid;
 		}
 		//todo: importer pptrs
-		meta.Stream.Save(path);
+		meta.Stream.SaveForUnity(path);
 	}
 
 	private static void UpdateAssetFile(string path, UnityGuid oldMetaGuid)

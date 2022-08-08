@@ -1,12 +1,37 @@
 ﻿using System.IO;
+using YamlDotNet.Core;
 using YamlDotNet.RepresentationModel;
 
 namespace GuidUpdater;
-internal static class YamlStreamExtensions
+public static class YamlStreamExtensions
 {
-	public static void Save(this YamlStream yamlStream, string path)
+	static YamlStreamExtensions()
 	{
-		using StreamWriter streamWriter = new StreamWriter(path);
-		yamlStream.Save(streamWriter);
+		EmitterPatch.Apply();
+	}
+
+	public static void SaveForUnity(this YamlStream yamlStream, string path)
+	{
+		File.WriteAllText(path, yamlStream.SaveForUnity());
+	}
+
+	public static string SaveForUnity(this YamlStream yamlStream)
+	{
+		using StringWriter writer = new();
+		Emitter emitter = new Emitter(writer);
+		yamlStream.Save(emitter, false);
+		string text = writer.ToString();
+		if (text.EndsWith("...\r\n", System.StringComparison.Ordinal))
+		{
+			return text[..^5];
+		}
+		else if (text.EndsWith("...\n", System.StringComparison.Ordinal))
+		{
+			return text[..^4];
+		}
+		else
+		{
+			return text;
+		}
 	}
 }
