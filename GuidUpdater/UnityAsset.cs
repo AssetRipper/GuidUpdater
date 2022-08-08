@@ -83,7 +83,7 @@ public readonly record struct UnityAsset(YamlDocument Document)
 		name = null;
 		return false;
 	}
-	
+
 	private YamlMappingNode GetAssetPropertyMappingNode()
 	{
 		Debug.Assert(Document.RootNode is YamlMappingNode);
@@ -91,7 +91,7 @@ public readonly record struct UnityAsset(YamlDocument Document)
 		Debug.Assert(rootNode.Children.Count == 1);
 		return (YamlMappingNode)rootNode.Children[0].Value;
 	}
-	
+
 	public IEnumerable<YamlPPtrNode> FindAllPPtrs()
 	{
 		YamlMappingNode mappingNode = GetAssetPropertyMappingNode();

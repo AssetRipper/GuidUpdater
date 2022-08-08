@@ -8,7 +8,7 @@ public class PPtrTests
 		PPtr pptr = default;
 		Assert.That(pptr.ToString(), Is.EqualTo("{fileID: 0}"));
 	}
-	
+
 	[Test]
 	public void InternalPointerString()
 	{

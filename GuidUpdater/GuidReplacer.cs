@@ -4,7 +4,7 @@ using System.IO;
 namespace GuidUpdater;
 
 public static class GuidReplacer
-{	
+{
 	/// <summary>
 	/// Update all references in the project
 	/// </summary>

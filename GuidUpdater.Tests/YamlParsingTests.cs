@@ -37,7 +37,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}";
 	private const long GameObjectFileID = 3975326226355896;
 	private const long TransformFileID = 3975326226366417;
-	
+
 	[Test]
 	public void ParseGameObject()
 	{
@@ -52,7 +52,7 @@ Transform:
 		Assert.That(asset.TryParseName(out string? name));
 		Assert.That(name, Is.EqualTo("Dummy_Prefab"));
 	}
-	
+
 	[Test]
 	public void ParseTransform()
 	{

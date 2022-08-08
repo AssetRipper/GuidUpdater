@@ -4,25 +4,25 @@ using System.IO;
 namespace GuidUpdater;
 internal static class FilePaths
 {
-	private static HashSet<string> IgnoredFolders { get; } = new() 
-	{ 
-		"CombinedMesh", 
+	private static HashSet<string> IgnoredFolders { get; } = new()
+	{
+		"CombinedMesh",
 		"Scenes",
 	};
-	private static HashSet<string> IgnoredFileExtensions { get; } = new() 
-	{ 
-		".cs", 
-		".dll", 
-		".shader", 
-		".png", 
-		".obj", 
-		".fbx", 
-		".blend", 
-		".unity3d", 
-		".otf", 
-		".ttf", 
-		".bytes", 
-		".txt", 
+	private static HashSet<string> IgnoredFileExtensions { get; } = new()
+	{
+		".cs",
+		".dll",
+		".shader",
+		".png",
+		".obj",
+		".fbx",
+		".blend",
+		".unity3d",
+		".otf",
+		".ttf",
+		".bytes",
+		".txt",
 		".json",
 	};
 

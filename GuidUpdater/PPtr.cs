@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GuidUpdater;
+﻿namespace GuidUpdater;
 
 public readonly record struct PPtr(long FileID, UnityGuid Guid, AssetType Type)
 {
@@ -22,7 +20,7 @@ public readonly record struct PPtr(long FileID, UnityGuid Guid, AssetType Type)
 	public PPtr ToInterFile(UnityGuid guid)
 	{
 		return IsIntraFile
-			? new PPtr(FileID, guid, Type) 
+			? new PPtr(FileID, guid, Type)
 			: this;
 	}
 
@@ -45,7 +43,7 @@ public readonly record struct PPtr(long FileID, UnityGuid Guid, AssetType Type)
 	/// The <see cref="PPtr"/> references an asset within the same file.
 	/// </summary>
 	public bool IsIntraFile => Guid == UnityGuid.Zero;
-	
+
 	/// <summary>
 	/// Not null, internal, nor missing
 	/// </summary>

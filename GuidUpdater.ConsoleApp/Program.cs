@@ -6,8 +6,8 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        DoReplacement(@"FirstProject\Assets", @"SecondProject\Assets");
-        //DoReplacement(args[0], args[1]);
+        //DoReplacement(@"FirstProject\Assets", @"SecondProject\Assets");
+        DoReplacement(args[0], args[1]);
         Console.WriteLine("Done!");
     }
 

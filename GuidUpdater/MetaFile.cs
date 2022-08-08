@@ -22,14 +22,14 @@ public readonly record struct MetaFile(YamlStream Stream)
 			guidNode.Value = value.ToString();
 		}
 	}
-	
+
 	private static YamlScalarNode GetGuidNode(YamlStream stream)
 	{
 		Debug.Assert(stream.Documents.Count == 1);
 		YamlMappingNode rootNode = (YamlMappingNode)stream.Documents[0].RootNode;
 		return (YamlScalarNode)rootNode.Children.First(pair => ((YamlScalarNode)pair.Key).Value == "guid").Value;
 	}
-	
+
 	public static implicit operator YamlStream(MetaFile meta) => meta.Stream;
 	public static implicit operator MetaFile(YamlStream stream) => new MetaFile(stream);
 

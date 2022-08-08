@@ -49,8 +49,8 @@ internal static class YamlNodeExtensions
 
 	public static YamlPPtrNode ParseAsPPtr(this YamlNode node)
 	{
-		return node.TryParseAsPPtr(out YamlPPtrNode pptr) 
-			? pptr 
+		return node.TryParseAsPPtr(out YamlPPtrNode pptr)
+			? pptr
 			: throw new ArgumentException("Node is not a PPtr", nameof(node));
 	}
 
@@ -58,7 +58,7 @@ internal static class YamlNodeExtensions
 	{
 		return node is YamlScalarNode scalarNode && scalarNode.Value == expectedValue;
 	}
-	
+
 	private static bool IsNonemptyScalarNode(this YamlNode node)
 	{
 		return node is YamlScalarNode scalarNode && !string.IsNullOrEmpty(scalarNode.Value);
