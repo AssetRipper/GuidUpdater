@@ -21,9 +21,9 @@ public readonly record struct PPtr(long FileID, UnityGuid Guid, AssetType Type)
 
 	public PPtr ToInterFile(UnityGuid guid)
 	{
-		return IsIntraFile || Guid == guid 
+		return IsIntraFile
 			? new PPtr(FileID, guid, Type) 
-			: throw new ArgumentException(null, nameof(guid));
+			: this;
 	}
 
 	/// <summary>
