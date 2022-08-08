@@ -60,5 +60,6 @@ public static class GuidReplacer
 			PPtr assetPPtr = new PPtr(asset.FileID, oldMetaGuid, AssetType.Serialized);
 			asset.FileID = IdentifierMap.GetNewPPtr(assetPPtr).FileID;
 		}
+		file.Stream.SaveForUnity(path);
 	}
 }
