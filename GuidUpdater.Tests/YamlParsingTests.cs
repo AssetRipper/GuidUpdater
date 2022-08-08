@@ -43,24 +43,28 @@ Transform:
 	{
 		YamlStream stream = YamlLoader.LoadAssetYamlStreamFromText(PrefabText);
 		YamlDocument document = stream.Documents[0];
+		YamlAsset asset = document;
 		Assert.Multiple(() =>
 		{
-			Assert.That(document.GetClassID(), Is.EqualTo(1));
-			Assert.That(document.GetFileID(), Is.EqualTo(GameObjectFileID));
+			Assert.That(asset.ClassID, Is.EqualTo(1));
+			Assert.That(asset.FileID, Is.EqualTo(GameObjectFileID));
+			Assert.That(asset.Stripped, Is.EqualTo(false));
 		});
 		Assert.That(document.TryParseName(out string? name));
 		Assert.That(name, Is.EqualTo("Dummy_Prefab"));
 	}
-
+	
 	[Test]
 	public void ParseTransform()
 	{
 		YamlStream stream = YamlLoader.LoadAssetYamlStreamFromText(PrefabText);
 		YamlDocument document = stream.Documents[1];
+		YamlAsset asset = document;
 		Assert.Multiple(() =>
 		{
-			Assert.That(document.GetClassID(), Is.EqualTo(4));
-			Assert.That(document.GetFileID(), Is.EqualTo(TransformFileID));
+			Assert.That(asset.ClassID, Is.EqualTo(4));
+			Assert.That(asset.FileID, Is.EqualTo(TransformFileID));
+			Assert.That(asset.Stripped, Is.EqualTo(false));
 		});
 	}
 }
