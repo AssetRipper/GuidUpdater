@@ -1,6 +1,5 @@
 ﻿using HarmonyLib;
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
@@ -14,14 +13,21 @@ internal static class EmitterPatch
 	private static readonly FieldInfo scalarDataField;
 	private static readonly Type scalarDataType;
 	private static readonly FieldInfo scalarDataValueField;
+	private static readonly FieldInfo tagDirectivesField;
+	private static readonly MethodInfo processTagMethod;
+	private static readonly MethodInfo analyzeTagMethod;
 	private static readonly Harmony harmony = new Harmony("GuidUpdater");
+	private static readonly TagDirective unityTag = new TagDirective("!u!", "tag:unity3d.com,2011:");
 	public static bool EmittingAssetFile { get; set; }
 
 	static EmitterPatch()
 	{
 		scalarDataField = typeof(Emitter).GetField("scalarData", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance) ?? throw new Exception("Could not find Emitter.scalarData");
+		tagDirectivesField = typeof(Emitter).GetField("tagDirectives", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance) ?? throw new Exception("Could not find Emitter.tagDirectives");
 		scalarDataType = typeof(Emitter).GetNestedType("ScalarData", BindingFlags.NonPublic) ?? throw new Exception("Could not find ScalarData");
 		scalarDataValueField = scalarDataType.GetField("Value", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance) ?? throw new Exception("Could not find ScalarData.Value");
+		processTagMethod = typeof(Emitter).GetMethod("ProcessTag", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance) ?? throw new Exception("Could not find Emitter.ProcessTag()");
+		analyzeTagMethod = typeof(Emitter).GetMethod("AnalyzeTag", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance) ?? throw new Exception("Could not find Emitter.ProcessTag()");
 	}
 
 	private static string? GetScalarValue(Emitter emitter)
@@ -45,35 +51,40 @@ internal static class EmitterPatch
 
 	[HarmonyPatch(typeof(Emitter), "AppendTagDirectiveTo")]
 	[HarmonyPrefix]
-	private static bool AppendTagDirectiveTo()
+	private static bool OnlyAppendUnityTag(TagDirective value)
 	{
-		return false;
+		return value == unityTag;
 	}
-
-	[HarmonyPatch(typeof(Emitter), "NonDefaultTagsAmong")]
-	[HarmonyPrefix]
-	private static bool NonDefaultTagsAmong(IEnumerable<TagDirective>? tagCollection, ref TagDirectiveCollection __result)
-	{
-		if (tagCollection is not null && tagCollection is TagDirectiveCollection collection)
-		{
-			__result = collection;
-			return false;
-		}
-		return true;
-	}
-
+	
 	[HarmonyPatch(typeof(Emitter), "EmitDocumentStart")]
 	[HarmonyPrefix]
-	private static void AddTagAndVersionToHeader(ref ParsingEvent evt, bool isFirst)
+	private static void AddTagAndVersionToHeader(Emitter __instance, ref ParsingEvent evt, bool isFirst)
 	{
-		if (isFirst && EmittingAssetFile)
+		if (EmittingAssetFile && evt is DocumentStart originalEvent)
 		{
-			DocumentStart start = (DocumentStart)evt;
-			VersionDirective version = new VersionDirective(new YamlDotNet.Core.Version(1, 1));
-			TagDirectiveCollection tags = new TagDirectiveCollection();
-			TagDirective tag = new TagDirective("!u!", "tag:unity3d.com,2011:");
-			tags.Add(tag);
-			evt = new DocumentStart(version, tags, false, start.Start, start.End);
+			if (isFirst)
+			{
+				VersionDirective version = new VersionDirective(new YamlDotNet.Core.Version(1, 1));
+				TagDirectiveCollection tags = new TagDirectiveCollection();
+				tags.Add(unityTag);
+				evt = new DocumentStart(version, tags, false, originalEvent.Start, originalEvent.End);
+			}
+			else
+			{
+				TagDirectiveCollection tagDirectives = (TagDirectiveCollection?)tagDirectivesField.GetValue(__instance) ?? throw new Exception();
+				tagDirectives.Add(unityTag);
+			}
+		}
+	}
+
+	[HarmonyPatch(typeof(Emitter), "AnalyzeEvent")]
+	[HarmonyPrefix]
+	private static void EnsureClassIdIsEmitted(Emitter __instance, ParsingEvent evt)
+	{
+		if (evt is NodeEvent nodeEvent && !nodeEvent.Tag.IsEmpty)
+		{
+			analyzeTagMethod.Invoke(__instance, new object[] { nodeEvent.Tag });
+			processTagMethod.Invoke(__instance, null);
 		}
 	}
 
