@@ -37,20 +37,19 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}";
 	private const long GameObjectFileID = 3975326226355896;
 	private const long TransformFileID = 3975326226366417;
-
+	
 	[Test]
 	public void ParseGameObject()
 	{
 		YamlStream stream = AssetFile.FromText(PrefabText);
-		YamlDocument document = stream.Documents[0];
-		UnityAsset asset = document;
+		UnityAsset asset = stream.Documents[0];
 		Assert.Multiple(() =>
 		{
 			Assert.That(asset.ClassID, Is.EqualTo(1));
 			Assert.That(asset.FileID, Is.EqualTo(GameObjectFileID));
 			Assert.That(asset.Stripped, Is.EqualTo(false));
 		});
-		Assert.That(document.TryParseName(out string? name));
+		Assert.That(asset.TryParseName(out string? name));
 		Assert.That(name, Is.EqualTo("Dummy_Prefab"));
 	}
 	
@@ -58,8 +57,7 @@ Transform:
 	public void ParseTransform()
 	{
 		YamlStream stream = AssetFile.FromText(PrefabText);
-		YamlDocument document = stream.Documents[1];
-		UnityAsset asset = document;
+		UnityAsset asset = stream.Documents[1];
 		Assert.Multiple(() =>
 		{
 			Assert.That(asset.ClassID, Is.EqualTo(4));

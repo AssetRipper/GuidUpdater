@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using YamlDotNet.RepresentationModel;
 
 namespace GuidUpdater;
@@ -69,4 +70,24 @@ public readonly record struct UnityAsset(YamlDocument Document)
 
 	public static implicit operator YamlDocument(UnityAsset asset) => asset.Document;
 	public static implicit operator UnityAsset(YamlDocument document) => new UnityAsset(document);
+
+	public bool TryParseName([NotNullWhen(true)] out string? name)
+	{
+		YamlMappingNode mappingNode = GetAssetPropertyMappingNode();
+		if (mappingNode.TryGetValue("m_Name", out YamlNode? value) && value is YamlScalarNode valueScalar)
+		{
+			name = valueScalar.Value ?? string.Empty;
+			return true;
+		}
+		name = null;
+		return false;
+	}
+	
+	public YamlMappingNode GetAssetPropertyMappingNode()
+	{
+		Debug.Assert(Document.RootNode is YamlMappingNode);
+		YamlMappingNode rootNode = (YamlMappingNode)Document.RootNode;
+		Debug.Assert(rootNode.Children.Count == 1);
+		return (YamlMappingNode)rootNode.Children[0].Value;
+	}
 }
