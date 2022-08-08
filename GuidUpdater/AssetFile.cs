@@ -43,4 +43,6 @@ public readonly record struct AssetFile(YamlStream Stream)
 	}
 
 	public IEnumerable<UnityAsset> Assets => Stream.Documents.Select(document => new UnityAsset(document));
+	public int Count => Stream.Documents.Count;
+	public UnityAsset this[int index] => Stream.Documents[index];
 }

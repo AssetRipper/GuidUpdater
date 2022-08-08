@@ -1,10 +1,22 @@
-﻿using System;
+﻿using GuidUpdater.Matching;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace GuidUpdater;
 
 public static class GuidParser
 {
+	private static readonly Stack<AssetMatcher> matchers = new()
+	{
+		new DefaultMatcher(),
+		new SingletonMatcher(),
+	};
+
+	//Required for the initialization above
+	private static void Add(this Stack<AssetMatcher> stack, AssetMatcher matcher) => stack.Push(matcher);
+
 	/// <summary>
 	/// Make a mapping of all the guid's in the project
 	/// </summary>
@@ -53,7 +65,11 @@ public static class GuidParser
 				{
 					AssetFile oldAssetFile = AssetFile.FromFile(oldAssetPath);
 					AssetFile newAssetFile = AssetFile.FromFile(newAssetPath);
-					//Todo: match file id's
+					AssetMatcher matcher = matchers.First(m => m.Applies(oldAssetFile, newAssetFile));
+					foreach ((long fileID1, long fileID2) in matcher.GetMatches(oldAssetFile, newAssetFile))
+					{
+						IdentifierMap.Map(new PPtr(fileID1, oldGuid, AssetType.Serialized), new PPtr(fileID2, newGuid, AssetType.Serialized));
+					}
 				}
 				IdentifierMap.Map(oldGuid, newGuid);
 			}
