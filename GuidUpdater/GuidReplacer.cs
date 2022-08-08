@@ -41,7 +41,7 @@ public static class GuidReplacer
 			meta.Guid = newGuid;
 		}
 		//todo: importer pptrs
-		meta.Stream.SaveForUnity(path);
+		meta.Stream.SaveForUnity(false, path);
 	}
 
 	private static void UpdateAssetFile(string path, UnityGuid oldMetaGuid)
@@ -60,6 +60,6 @@ public static class GuidReplacer
 			PPtr assetPPtr = new PPtr(asset.FileID, oldMetaGuid, AssetType.Serialized);
 			asset.FileID = IdentifierMap.GetNewPPtr(assetPPtr).FileID;
 		}
-		file.Stream.SaveForUnity(path);
+		file.Stream.SaveForUnity(true, path);
 	}
 }

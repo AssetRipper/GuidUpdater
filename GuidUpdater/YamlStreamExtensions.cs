@@ -10,28 +10,18 @@ public static class YamlStreamExtensions
 		EmitterPatch.Apply();
 	}
 
-	public static void SaveForUnity(this YamlStream yamlStream, string path)
+	public static void SaveForUnity(this YamlStream yamlStream, bool assetFile, string path)
 	{
-		File.WriteAllText(path, yamlStream.SaveForUnity());
+		File.WriteAllText(path, yamlStream.SaveForUnity(assetFile));
 	}
 
-	public static string SaveForUnity(this YamlStream yamlStream)
+	public static string SaveForUnity(this YamlStream yamlStream, bool assetFile)
 	{
+		EmitterPatch.EmittingAssetFile = assetFile;
 		using StringWriter writer = new();
+		writer.NewLine = "\n";
 		Emitter emitter = new Emitter(writer);
 		yamlStream.Save(emitter, false);
-		string text = writer.ToString();
-		if (text.EndsWith("...\r\n", System.StringComparison.Ordinal))
-		{
-			return text[..^5];
-		}
-		else if (text.EndsWith("...\n", System.StringComparison.Ordinal))
-		{
-			return text[..^4];
-		}
-		else
-		{
-			return text;
-		}
+		return writer.ToString();
 	}
 }
