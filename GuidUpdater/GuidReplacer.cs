@@ -10,6 +10,7 @@ namespace GuidUpdater;
 
 public static class GuidReplacer
 {
+	static readonly string[] ignoredFolders = new string[] { "CombinedMesh", "Scenes" };
 	private readonly static string[] ignoredFileExtensions = new string[] { ".cs", ".dll", ".shader", ".png", ".obj", ".fbx", ".blend", ".unity3d", ".otf", ".ttf", ".bytes", ".txt", ".json" };
 	public static void ReplaceGuids(string oldAssetsPath, Dictionary<string, string> conversionMap)
 	{
@@ -63,25 +64,46 @@ public static class GuidReplacer
 		}
 	}
 
-	private static bool TryReplaceMetaGuid(string path, out UnityGuid oldGuid, out UnityGuid newGuid)
+	/// <summary>
+	/// Make a mapping of all the guid's in the project
+	/// </summary>
+	/// <param name="oldRootDirectory">the absolute path to the old root directory, ie the assets folder</param>
+	/// <exception cref="ArgumentException">Directory doesn't exist</exception>
+	internal static void UpdateReferencesInDirectory(string searchDirectory)
+	{
+		foreach (string directory in Directory.GetDirectories(searchDirectory))
+		{
+			if (!ignoredFolders.Contains(Path.GetFileName(directory)))
+			{
+				UpdateReferencesInDirectory(directory);
+			}
+		}
+		foreach (string oldMetaPath in Directory.GetFiles(searchDirectory, "*.meta", SearchOption.TopDirectoryOnly))
+		{
+			UpdateMetaFile(oldMetaPath, out UnityGuid oldGuid);
+
+			string oldAssetPath = oldMetaPath.Substring(0, oldMetaPath.Length - 5);
+			if (File.Exists(oldAssetPath) && IsSerializedFile(oldAssetPath))
+			{
+				UpdateAssetFile(oldAssetPath, oldGuid);
+			}
+		}
+	}
+
+	private static void UpdateMetaFile(string path, out UnityGuid oldGuid)
 	{
 		MetaFile meta = MetaFile.FromFile(path);
 		oldGuid = meta.Guid;
 
-		if (IdentifierMap.TryGetNewGuid(oldGuid, out newGuid))
+		if (IdentifierMap.TryGetNewGuid(oldGuid, out UnityGuid newGuid))
 		{
 			meta.Guid = newGuid;
-			meta.Stream.Save(path);
-			return true;
-		}
-		else
-		{
-			return false;
 		}
 		//todo: importer pptrs
+		meta.Stream.Save(path);
 	}
 
-	private static void ReplaceAssetPPtrs(string path, UnityGuid oldMetaGuid)
+	private static void UpdateAssetFile(string path, UnityGuid oldMetaGuid)
 	{
 		AssetFile file = AssetFile.FromFile(path);
 		foreach (UnityAsset asset in file.Assets)
