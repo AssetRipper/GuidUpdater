@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Text.RegularExpressions;
 using YamlDotNet.RepresentationModel;
 
@@ -21,8 +20,7 @@ public static class YamlLoader
 	{
 		input = strippedAssetHeaderRegex.Replace(input, "$1_$3");
 		YamlStream yaml = new();
-		using MemoryStream inputStream = new MemoryStream(Encoding.UTF8.GetBytes(input));
-		using StreamReader reader = new StreamReader(inputStream, Encoding.UTF8);
+		using StringReader reader = new StringReader(input);
 		yaml.Load(reader);
 		FixAnchorUnderscores(yaml.Documents);
 		return yaml;
@@ -48,8 +46,7 @@ public static class YamlLoader
 	public static YamlStream LoadMetaYamlStreamFromText(string input)
 	{
 		YamlStream yaml = new();
-		using MemoryStream inputStream = new MemoryStream(Encoding.UTF8.GetBytes(input));
-		using StreamReader reader = new StreamReader(inputStream, Encoding.UTF8);
+		using StringReader reader = new StringReader(input);
 		yaml.Load(reader);
 		return yaml;
 	}
