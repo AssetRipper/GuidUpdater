@@ -65,13 +65,13 @@ public static class GuidReplacer
 
 	private static bool TryReplaceMetaGuid(string path, out UnityGuid oldGuid, out UnityGuid newGuid)
 	{
-		YamlStream stream = YamlLoader.LoadMetaYamlStreamFromFile(path);
-		oldGuid = YamlMetaParser.GetGuidFromYamlStream(stream);
+		MetaFile meta = MetaFile.FromFile(path);
+		oldGuid = meta.Guid;
 
 		if (IdentifierMap.TryGetNewGuid(oldGuid, out newGuid))
 		{
-			YamlMetaParser.SetGuidInYamlStream(stream, newGuid);
-			stream.Save(path);
+			meta.Guid = newGuid;
+			meta.Stream.Save(path);
 			return true;
 		}
 		else

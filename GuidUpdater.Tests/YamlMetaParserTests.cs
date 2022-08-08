@@ -14,7 +14,7 @@ DefaultImporter:
   assetBundleName: 
   assetBundleVariant: 
 ";
-		UnityGuid guid = YamlMetaParser.GetGuidFromYamlStream(YamlLoader.LoadMetaYamlStreamFromText(metaYaml));
+		UnityGuid guid = MetaFile.FromText(metaYaml).Guid;
 		Assert.That(guid.ToString(), Is.EqualTo("12aec0e7dfcb8c64b833494b9e898aa3"));
 	}
 }

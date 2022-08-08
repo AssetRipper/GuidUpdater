@@ -37,17 +37,4 @@ public static class YamlLoader
 			}
 		}
 	}
-
-	public static YamlStream LoadMetaYamlStreamFromFile(string path)
-	{
-		return LoadMetaYamlStreamFromText(File.ReadAllText(path));
-	}
-
-	public static YamlStream LoadMetaYamlStreamFromText(string input)
-	{
-		YamlStream yaml = new();
-		using StringReader reader = new StringReader(input);
-		yaml.Load(reader);
-		return yaml;
-	}
 }
