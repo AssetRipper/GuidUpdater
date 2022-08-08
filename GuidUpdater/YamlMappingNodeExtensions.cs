@@ -16,4 +16,10 @@ public static class YamlMappingNodeExtensions
 		node.Children.TryGetValue(key, out YamlNode? value);
 		return value ?? throw new KeyNotFoundException();
 	}
+
+	public static KeyValuePair<YamlScalarNode, YamlNode> GetChild(this YamlMappingNode node, int index)
+	{
+		KeyValuePair<YamlNode, YamlNode> child = node.Children[index];
+		return new KeyValuePair<YamlScalarNode, YamlNode>((YamlScalarNode)child.Key, child.Value);
+	}
 }
