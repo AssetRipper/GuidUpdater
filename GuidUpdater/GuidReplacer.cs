@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using YamlDotNet.RepresentationModel;
 
 namespace GuidUpdater;
 
@@ -59,6 +60,23 @@ public static class GuidReplacer
 		if (changed)
 		{
 			File.WriteAllText(path, fileText);
+		}
+	}
+
+	private static bool TryReplaceMetaGuid(string path, out UnityGuid oldGuid, out UnityGuid newGuid)
+	{
+		YamlStream stream = YamlLoader.LoadMetaYamlStreamFromFile(path);
+		oldGuid = YamlMetaParser.GetGuidFromYamlStream(stream);
+
+		if (IdentifierMap.TryGetNewGuid(oldGuid, out newGuid))
+		{
+			YamlMetaParser.SetGuidInYamlStream(stream, newGuid);
+			stream.Save(path);
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
 

@@ -66,6 +66,20 @@ internal static class IdentifierMap
 		return newPPtr;
 	}
 
+	public static bool TryGetNewGuid(UnityGuid oldGuid, out UnityGuid newGuid)
+	{
+		if (GuidMap.TryGetValue(oldGuid, out UnityGuid value))
+		{
+			newGuid = value;
+			return true;
+		}
+		else
+		{
+			newGuid = oldGuid;
+			return false;
+		}
+	}
+
 	private static void ThrowIfInvalidForMapping(PPtr pptr)
 	{
 		if (pptr.IsNull || pptr.IsMissing || pptr.IsInternal || pptr.IsIntraFile)

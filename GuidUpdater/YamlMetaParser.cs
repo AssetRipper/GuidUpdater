@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using YamlDotNet.RepresentationModel;
 
@@ -7,15 +8,23 @@ public static class YamlMetaParser
 {
 	public static UnityGuid GetGuidFromYamlStream(YamlStream stream)
 	{
-		YamlMappingNode rootNode = stream.Documents[0].RootNode as YamlMappingNode 
-			?? throw new Exception("Root node must be a map");
-		YamlScalarNode guidNode = (YamlScalarNode)rootNode.Children.Single(pair => ((YamlScalarNode)pair.Key).Value == "guid").Value;
-		string guid = guidNode.Value ?? throw new Exception("Guid cannot be null");
-		if (guid.Length != 32)
-		{
-			throw new Exception("guid must be 32 characters");
-		}
-
+		YamlScalarNode guidNode = GetGuidNode(stream);
+		string guid = guidNode.Value!;
+		Debug.Assert(guid != null, "Guid cannot be null");
+		Debug.Assert(guid.Length == 32, "Guid must be 32 characters");
 		return UnityGuid.Parse(guid);
+	}
+
+	public static void SetGuidInYamlStream(YamlStream stream, UnityGuid guid)
+	{
+		YamlScalarNode guidNode = GetGuidNode(stream);
+		guidNode.Value = guid.ToString();
+	}
+
+	private static YamlScalarNode GetGuidNode(YamlStream stream)
+	{
+		Debug.Assert(stream.Documents.Count == 1);
+		YamlMappingNode rootNode = (YamlMappingNode)stream.Documents[0].RootNode;
+		return (YamlScalarNode)rootNode.Children.First(pair => ((YamlScalarNode)pair.Key).Value == "guid").Value;
 	}
 }
