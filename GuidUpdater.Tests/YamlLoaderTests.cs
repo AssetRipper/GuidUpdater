@@ -15,7 +15,7 @@ Material:
 --- !u!22 &2100001 stripped
 Material:
   serializedVersion: 6";
-		IList<YamlDocument> documents = YamlLoader.LoadAssetYamlStreamFromText(yamlText).Documents;
+		IList<YamlDocument> documents = AssetFile.FromText(yamlText).Stream.Documents;
 		Assert.That(documents.Count, Is.EqualTo(2));
 		Assert.That(documents[1].RootNode.Anchor.Value, Is.EqualTo("2100001 stripped"));
 	}

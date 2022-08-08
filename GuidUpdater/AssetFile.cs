@@ -5,18 +5,21 @@ using System.Text.RegularExpressions;
 using YamlDotNet.RepresentationModel;
 
 namespace GuidUpdater;
-public static class YamlLoader
+public readonly record struct AssetFile(YamlStream Stream)
 {
 	private static readonly Regex strippedAssetHeaderRegex = new Regex(@"(\n--- !u![0-9]+ &-?[0-9]+)( )(stripped\r?\n)", RegexOptions.Compiled);
 	private const string StrippedWithSpace = " stripped";
 	private const string StrippedWithUnderscore = "_stripped";
 
-	public static YamlStream LoadAssetYamlStreamFromFile(string path)
+	public static implicit operator YamlStream(AssetFile meta) => meta.Stream;
+	public static implicit operator AssetFile(YamlStream stream) => new AssetFile(stream);
+
+	public static AssetFile FromFile(string path)
 	{
-		return LoadAssetYamlStreamFromText(File.ReadAllText(path));
+		return FromText(File.ReadAllText(path));
 	}
 
-	public static YamlStream LoadAssetYamlStreamFromText(string input)
+	public static AssetFile FromText(string input)
 	{
 		input = strippedAssetHeaderRegex.Replace(input, "$1_$3");
 		YamlStream yaml = new();

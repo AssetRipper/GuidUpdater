@@ -3,7 +3,7 @@ using System.Diagnostics;
 using YamlDotNet.RepresentationModel;
 
 namespace GuidUpdater;
-public readonly record struct YamlAsset(YamlDocument Document)
+public readonly record struct UnityAsset(YamlDocument Document)
 {
 	private const string TagPrefix = "tag:unity3d.com,2011:";
 	private const string StrippedSuffix = " stripped";
@@ -67,6 +67,6 @@ public readonly record struct YamlAsset(YamlDocument Document)
 		set => Document.RootNode.Tag = value;
 	}
 
-	public static implicit operator YamlDocument(YamlAsset asset) => asset.Document;
-	public static implicit operator YamlAsset(YamlDocument document) => new YamlAsset(document);
+	public static implicit operator YamlDocument(UnityAsset asset) => asset.Document;
+	public static implicit operator UnityAsset(YamlDocument document) => new UnityAsset(document);
 }

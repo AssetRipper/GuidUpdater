@@ -41,9 +41,9 @@ Transform:
 	[Test]
 	public void ParseGameObject()
 	{
-		YamlStream stream = YamlLoader.LoadAssetYamlStreamFromText(PrefabText);
+		YamlStream stream = AssetFile.FromText(PrefabText);
 		YamlDocument document = stream.Documents[0];
-		YamlAsset asset = document;
+		UnityAsset asset = document;
 		Assert.Multiple(() =>
 		{
 			Assert.That(asset.ClassID, Is.EqualTo(1));
@@ -57,9 +57,9 @@ Transform:
 	[Test]
 	public void ParseTransform()
 	{
-		YamlStream stream = YamlLoader.LoadAssetYamlStreamFromText(PrefabText);
+		YamlStream stream = AssetFile.FromText(PrefabText);
 		YamlDocument document = stream.Documents[1];
-		YamlAsset asset = document;
+		UnityAsset asset = document;
 		Assert.Multiple(() =>
 		{
 			Assert.That(asset.ClassID, Is.EqualTo(4));
