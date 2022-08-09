@@ -6,14 +6,7 @@ namespace GuidUpdater.Assets;
 
 public readonly record struct Transform(UnityAsset Asset, Dictionary<long, UnityAsset> FileDictionary)
 {
-    public GameObject GameObject
-    {
-        get
-        {
-            long fileID = Asset.AssetRootNode.GetValue("m_GameObject").ParseAsPPtr().FileID;
-            return new GameObject(FileDictionary[fileID], FileDictionary);
-        }
-    }
+    public GameObject GameObject => ((Component)this).GameObject;
     public Transform? Parent
     {
         get
@@ -36,5 +29,5 @@ public readonly record struct Transform(UnityAsset Asset, Dictionary<long, Unity
                 .Select(id => new Transform(dictionary[id], dictionary));
         }
     }
-    public static implicit operator UnityAsset(Transform transform) => transform.Asset;
+    public static implicit operator UnityAsset(Transform asset) => asset.Asset;
 }
