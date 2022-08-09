@@ -91,11 +91,10 @@ public class PrefabMatcher : AssetMatcher
 		monoBehaviourDictionary = new();
 		foreach (Component component in gameObject.Components)
 		{
-			//Currently, script guid's aren't synced so this makes things worse.
-			/*if (component.IsMonoBehaviour)
+			if (component.IsMonoBehaviour)
 			{
 				MonoBehaviour monoBehaviour = (MonoBehaviour)component;
-				PPtr script = monoBehaviour.Script;
+				PPtr script = IdentifierMap.GetNewPPtr(monoBehaviour.Script);
 				int scriptIndex = 0;//The number of monobehaviours with the same script before this one
 				while (monoBehaviourDictionary.ContainsKey((script, scriptIndex)))
 				{
@@ -103,7 +102,7 @@ public class PrefabMatcher : AssetMatcher
 				}
 				monoBehaviourDictionary.Add((script, scriptIndex), monoBehaviour);
 			}
-			else*/
+			else
 			{
 				int id = component.Asset.ClassID;
 				int idIndex = 0;//The number of components with the same id before this one
