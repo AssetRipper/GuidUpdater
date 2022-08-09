@@ -12,6 +12,7 @@ public static class GuidParser
 	{
 		new DefaultMatcher(),
 		new SingletonMatcher(),
+		new PrefabMatcher(),
 	};
 
 	//Required for the initialization above
@@ -58,7 +59,7 @@ public static class GuidParser
 			UnityGuid newGuid = MetaFile.FromFile(newMetaPath).Guid;
 
 			string oldAssetPath = oldMetaPath.Substring(0, oldMetaPath.Length - 5);
-			string newAssetPath = oldMetaPath.Substring(0, newMetaPath.Length - 5);
+			string newAssetPath = newMetaPath.Substring(0, newMetaPath.Length - 5);
 			if (File.Exists(oldAssetPath) && File.Exists(newAssetPath))
 			{
 				if (FilePaths.IsSerializedFile(oldAssetPath))

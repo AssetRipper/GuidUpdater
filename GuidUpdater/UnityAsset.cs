@@ -68,14 +68,30 @@ public readonly record struct UnityAsset(YamlDocument Document)
 		get => Document.RootNode.Tag.Value;
 		set => Document.RootNode.Tag = value;
 	}
+	
+	/// <summary>
+	/// The <see cref="YamlMappingNode"/> containing the top-level properties of the asset, such as m_ObjectHideFlags.
+	/// </summary>
+	/// <remarks>
+	/// This is the child of <see cref="YamlDocument.RootNode"/>.
+	/// </remarks>
+	public YamlMappingNode AssetRootNode
+	{
+		get
+		{
+			Debug.Assert(Document.RootNode is YamlMappingNode);
+			YamlMappingNode rootNode = (YamlMappingNode)Document.RootNode;
+			Debug.Assert(rootNode.Children.Count == 1);
+			return (YamlMappingNode)rootNode.Children[0].Value;
+		}
+	}
 
 	public static implicit operator YamlDocument(UnityAsset asset) => asset.Document;
 	public static implicit operator UnityAsset(YamlDocument document) => new UnityAsset(document);
 
 	public bool TryParseName([NotNullWhen(true)] out string? name)
 	{
-		YamlMappingNode mappingNode = GetAssetPropertyMappingNode();
-		if (mappingNode.TryGetValue("m_Name", out YamlNode? value) && value is YamlScalarNode valueScalar)
+		if (AssetRootNode.TryGetValue("m_Name", out YamlNode? value) && value is YamlScalarNode valueScalar)
 		{
 			name = valueScalar.Value ?? string.Empty;
 			return true;
@@ -84,17 +100,5 @@ public readonly record struct UnityAsset(YamlDocument Document)
 		return false;
 	}
 
-	private YamlMappingNode GetAssetPropertyMappingNode()
-	{
-		Debug.Assert(Document.RootNode is YamlMappingNode);
-		YamlMappingNode rootNode = (YamlMappingNode)Document.RootNode;
-		Debug.Assert(rootNode.Children.Count == 1);
-		return (YamlMappingNode)rootNode.Children[0].Value;
-	}
-
-	public IEnumerable<YamlPPtrNode> FindAllPPtrs()
-	{
-		YamlMappingNode mappingNode = GetAssetPropertyMappingNode();
-		return mappingNode.FindAllPPtrs();
-	}
+	public IEnumerable<YamlPPtrNode> FindAllPPtrs() => AssetRootNode.FindAllPPtrs();
 }

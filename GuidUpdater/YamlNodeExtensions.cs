@@ -5,6 +5,10 @@ using YamlDotNet.RepresentationModel;
 namespace GuidUpdater;
 internal static class YamlNodeExtensions
 {
+	public static YamlScalarNode CastToScalar(this YamlNode node) => (YamlScalarNode)node;
+	public static YamlSequenceNode CastToSequence(this YamlNode node) => (YamlSequenceNode)node;
+	public static YamlMappingNode CastToMap(this YamlNode node) => (YamlMappingNode)node;
+
 	/// <summary>
 	/// Attempt to parse a <see cref="PPtr"/> from a <see cref="YamlNode"/>.
 	/// </summary>
