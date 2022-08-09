@@ -16,10 +16,14 @@ public class Program
         Stopwatch sw = Stopwatch.StartNew();
         Console.WriteLine($"Old Assets Directory: {oldAssetsDirectory}");
         Console.WriteLine($"New Assets Directory: {newAssetsDirectory}");
-        GuidParser.MakeMapping(oldAssetsDirectory, newAssetsDirectory);
+        GuidMapper.Map(oldAssetsDirectory, newAssetsDirectory);
         sw.Stop();
-        Console.WriteLine($"Mapping completed in {sw.Elapsed.TotalSeconds} seconds.");
+        Console.WriteLine($"Guid mapping completed in {sw.Elapsed.TotalSeconds} seconds.");
         sw.Restart();
+		PPtrMapper.Map(oldAssetsDirectory, newAssetsDirectory);
+		sw.Stop();
+		Console.WriteLine($"PPtr mapping completed in {sw.Elapsed.TotalSeconds} seconds.");
+		sw.Restart();
         ReferenceUpdater.UpdateReferencesInDirectory(oldAssetsDirectory);
         sw.Stop();
         Console.WriteLine($"Finished updating references in {sw.Elapsed.TotalSeconds} seconds.");

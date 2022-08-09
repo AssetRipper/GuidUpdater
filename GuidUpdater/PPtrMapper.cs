@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace GuidUpdater;
 
-public static class GuidParser
+public static class PPtrMapper
 {
 	private static readonly Stack<AssetMatcher> matchers = new()
 	{
@@ -19,12 +19,12 @@ public static class GuidParser
 	private static void Add(this Stack<AssetMatcher> stack, AssetMatcher matcher) => stack.Push(matcher);
 
 	/// <summary>
-	/// Make a mapping of all the guid's in the project
+	/// Make a mapping of all the pptr's in the project
 	/// </summary>
 	/// <param name="oldRootDirectory">the absolute path to the old root directory, ie the assets folder</param>
 	/// <param name="newRootDirectory">the absolute path to the new root directory, ie the assets folder</param>
 	/// <exception cref="ArgumentException">Directory doesn't exist</exception>
-	public static void MakeMapping(string oldRootDirectory, string newRootDirectory)
+	public static void Map(string oldRootDirectory, string newRootDirectory)
 	{
 		if (!Directory.Exists(oldRootDirectory))
 		{
@@ -60,33 +60,14 @@ public static class GuidParser
 
 			string oldAssetPath = oldMetaPath.Substring(0, oldMetaPath.Length - 5);
 			string newAssetPath = newMetaPath.Substring(0, newMetaPath.Length - 5);
-			if (File.Exists(oldAssetPath) && File.Exists(newAssetPath))
+			if (File.Exists(oldAssetPath) && File.Exists(newAssetPath) && FilePaths.IsSerializedFile(oldAssetPath))
 			{
-				if (FilePaths.IsSerializedFile(oldAssetPath))
+				AssetFile oldAssetFile = AssetFile.FromFile(oldAssetPath);
+				AssetFile newAssetFile = AssetFile.FromFile(newAssetPath);
+				AssetMatcher matcher = matchers.First(m => m.Applies(oldAssetFile, newAssetFile));
+				foreach ((long fileID1, long fileID2) in matcher.GetMatches(oldAssetFile, newAssetFile))
 				{
-					AssetFile oldAssetFile = AssetFile.FromFile(oldAssetPath);
-					AssetFile newAssetFile = AssetFile.FromFile(newAssetPath);
-					AssetMatcher matcher = matchers.First(m => m.Applies(oldAssetFile, newAssetFile));
-					foreach ((long fileID1, long fileID2) in matcher.GetMatches(oldAssetFile, newAssetFile))
-					{
-						IdentifierMap.Map(new PPtr(fileID1, oldGuid, AssetType.Serialized), new PPtr(fileID2, newGuid, AssetType.Serialized));
-					}
-				}
-				IdentifierMap.Map(oldGuid, newGuid);
-			}
-			else if (!File.Exists(oldAssetPath) && !File.Exists(newAssetPath))
-			{
-				if (!Directory.Exists(oldAssetPath))
-				{
-					throw new Exception($"Loose meta file: {oldMetaPath}");
-				}
-				else if (!Directory.Exists(newAssetPath))
-				{
-					throw new Exception($"Loose meta file: {oldMetaPath}");
-				}
-				else
-				{
-					IdentifierMap.Map(oldGuid, newGuid);
+					IdentifierMap.Map(new PPtr(fileID1, oldGuid, AssetType.Serialized), new PPtr(fileID2, newGuid, AssetType.Serialized));
 				}
 			}
 		}
