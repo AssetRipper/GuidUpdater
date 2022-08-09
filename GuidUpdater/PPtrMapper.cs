@@ -11,8 +11,9 @@ public static class PPtrMapper
 	private static readonly Stack<AssetMatcher> matchers = new()
 	{
 		new DefaultMatcher(),
-		new SingletonMatcher(),
+		new NamedObjectMatcher(),
 		new PrefabMatcher(),
+		new SingletonMatcher(),
 	};
 
 	//Required for the initialization above

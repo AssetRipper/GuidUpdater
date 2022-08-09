@@ -25,7 +25,7 @@ public class PrefabMatcher : AssetMatcher
 
 	private static GameObject GetRootGameObject(AssetFile file)
 	{
-		Dictionary<long, UnityAsset> dictionary = file.Assets.ToDictionary(asset => asset.FileID, asset => asset);
+		Dictionary<long, UnityAsset> dictionary = file.MakeAssetDictionary();
 		GameObject firstGameObject = new GameObject(file.Assets.First(asset => asset.ClassID == 1), dictionary);
 		return firstGameObject.GetRoot();
 	}

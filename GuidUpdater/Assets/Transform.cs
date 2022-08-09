@@ -30,4 +30,6 @@ public readonly record struct Transform(UnityAsset Asset, Dictionary<long, Unity
         }
     }
     public static implicit operator UnityAsset(Transform asset) => asset.Asset;
+	public static explicit operator Transform(Component asset) => new Transform(asset.Asset, asset.FileDictionary);
+	public static implicit operator Component(Transform asset) => new Component(asset.Asset, asset.FileDictionary);
 }

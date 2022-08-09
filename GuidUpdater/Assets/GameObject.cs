@@ -34,4 +34,6 @@ public readonly record struct GameObject(UnityAsset Asset, Dictionary<long, Unit
 		return root;
 	}
 	public static implicit operator UnityAsset(GameObject asset) => asset.Asset;
+	public static explicit operator GameObject(NamedObject asset) => new GameObject(asset.Asset, asset.FileDictionary);
+	public static implicit operator NamedObject(GameObject asset) => new NamedObject(asset.Asset, asset.FileDictionary);
 }
