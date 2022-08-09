@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using YamlDotNet.RepresentationModel;
 
 namespace GuidUpdater;
 
@@ -40,7 +41,30 @@ public static class ReferenceUpdater
 		{
 			meta.Guid = newGuid;
 		}
-		//todo: importer pptrs
+
+		if (meta.ImporterName == "NativeFormatImporter")
+		{
+			YamlScalarNode fileIDNode = meta.ImporterRootNode.GetValue("mainObjectFileID").CastToScalar();
+			string? fileIDString = fileIDNode.Value;
+			if (!string.IsNullOrEmpty(fileIDString))
+			{
+				PPtr pptr = new PPtr(long.Parse(fileIDString), oldGuid, AssetType.Serialized);
+				if (pptr.IsReplaceable)
+				{
+					fileIDNode.Value = IdentifierMap.GetNewPPtr(pptr.ToInterFile(oldGuid)).FileID.ToString();
+				}
+			}
+		}
+
+		foreach (YamlPPtrNode node in meta.ImporterRootNode.FindAllPPtrs())
+		{
+			PPtr pptr = node.PPtr;
+			if (pptr.IsReplaceable)
+			{
+				node.PPtr = IdentifierMap.GetNewPPtr(pptr.ToInterFile(oldGuid));
+			}
+		}
+
 		meta.Stream.SaveForUnity(false, path);
 	}
 
