@@ -3,7 +3,7 @@ using System.IO;
 
 namespace GuidUpdater;
 
-public static class GuidReplacer
+public static class ReferenceUpdater
 {
 	/// <summary>
 	/// Update all references in the project

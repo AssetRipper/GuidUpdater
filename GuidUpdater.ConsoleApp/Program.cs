@@ -20,7 +20,7 @@ public class Program
         sw.Stop();
         Console.WriteLine($"Mapping completed in {sw.Elapsed.TotalSeconds} seconds.");
         sw.Restart();
-        GuidReplacer.UpdateReferencesInDirectory(oldAssetsDirectory);
+        ReferenceUpdater.UpdateReferencesInDirectory(oldAssetsDirectory);
         sw.Stop();
         Console.WriteLine($"Finished updating references in {sw.Elapsed.TotalSeconds} seconds.");
     }
