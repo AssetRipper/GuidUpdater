@@ -1,71 +1,57 @@
-﻿using System;
+﻿using GuidUpdater.Scripts;
+using System;
 using System.IO;
 
 namespace GuidUpdater;
 
 public static class GuidMapper
 {
-	/// <summary>
-	/// Make a mapping of all the guid's in the project
-	/// </summary>
-	/// <param name="oldRootDirectory">the absolute path to the old root directory, ie the assets folder</param>
-	/// <param name="newRootDirectory">the absolute path to the new root directory, ie the assets folder</param>
-	/// <exception cref="ArgumentException">Directory doesn't exist</exception>
-	public static void Map(string oldRootDirectory, string newRootDirectory)
+	public static void Map()
 	{
-		if (!Directory.Exists(oldRootDirectory))
+		foreach (string commonRelativePath in PathMapper.CommonPaths)
 		{
-			throw new ArgumentException(null, nameof(oldRootDirectory));
+			UnityGuid oldGuid = GetGuidFromPath(PathMapper.OldRootDirectory, commonRelativePath);
+			UnityGuid newGuid = GetGuidFromPath(PathMapper.NewRootDirectory, commonRelativePath);
+			IdentifierMap.Map(oldGuid, newGuid);
 		}
-		if (!Directory.Exists(newRootDirectory))
+		foreach(string oldRelativePath in PathMapper.OldPaths)
 		{
-			throw new ArgumentException(null, nameof(newRootDirectory));
+			if (oldRelativePath.EndsWith(".cs.meta", StringComparison.InvariantCulture))
+			{
+				string metaPath = Path.Combine(PathMapper.OldRootDirectory, oldRelativePath);
+				UnityGuid oldGuid = MetaFile.FromFile(metaPath).Guid;
+				string assetPath = metaPath.Substring(0, metaPath.Length - 5);
+				ScriptMapper.RegisterOldScript(oldGuid, assetPath);
+			}
+			else if (oldRelativePath.EndsWith(".dll.meta", StringComparison.InvariantCulture))
+			{
+				string metaPath = Path.Combine(PathMapper.OldRootDirectory, oldRelativePath);
+				UnityGuid oldGuid = MetaFile.FromFile(metaPath).Guid;
+				string assetPath = metaPath.Substring(0, metaPath.Length - 5);
+				ScriptMapper.RegisterOldAssembly(oldGuid, assetPath);
+			}
 		}
-
-		AddDirectoryToMapping(oldRootDirectory, oldRootDirectory, newRootDirectory);
+		foreach (string newRelativePath in PathMapper.NewPaths)
+		{
+			if (newRelativePath.EndsWith(".cs.meta", StringComparison.InvariantCulture))
+			{
+				string metaPath = Path.Combine(PathMapper.NewRootDirectory, newRelativePath);
+				UnityGuid guid = MetaFile.FromFile(metaPath).Guid;
+				string assetPath = metaPath.Substring(0, metaPath.Length - 5);
+				ScriptMapper.RegisterNewScript(guid, assetPath);
+			}
+			else if (newRelativePath.EndsWith(".dll.meta", StringComparison.InvariantCulture))
+			{
+				string metaPath = Path.Combine(PathMapper.NewRootDirectory, newRelativePath);
+				UnityGuid guid = MetaFile.FromFile(metaPath).Guid;
+				string assetPath = metaPath.Substring(0, metaPath.Length - 5);
+				ScriptMapper.RegisterNewAssembly(guid, assetPath);
+			}
+		}
 	}
 
-	private static void AddDirectoryToMapping(string oldRootDirectory, string searchDirectory, string newRootDirectory)
+	private static UnityGuid GetGuidFromPath(string rootDirectory, string relativePath)
 	{
-		foreach (string directory in Directory.GetDirectories(searchDirectory))
-		{
-			if (!FilePaths.IsIgnoredFolder(directory))
-			{
-				AddDirectoryToMapping(oldRootDirectory, directory, newRootDirectory);
-			}
-		}
-		foreach (string oldMetaPath in Directory.GetFiles(searchDirectory, "*.meta", SearchOption.TopDirectoryOnly))
-		{
-			string newMetaPath = Path.Combine(newRootDirectory, Path.GetRelativePath(oldRootDirectory, oldMetaPath));
-			if (!File.Exists(newMetaPath))
-			{
-				continue;
-			}
-
-			UnityGuid oldGuid = MetaFile.FromFile(oldMetaPath).Guid;
-			UnityGuid newGuid = MetaFile.FromFile(newMetaPath).Guid;
-
-			string oldAssetPath = oldMetaPath.Substring(0, oldMetaPath.Length - 5);
-			string newAssetPath = newMetaPath.Substring(0, newMetaPath.Length - 5);
-			if (File.Exists(oldAssetPath) && File.Exists(newAssetPath))
-			{
-				IdentifierMap.Map(oldGuid, newGuid);
-			}
-			else if (!File.Exists(oldAssetPath) && !File.Exists(newAssetPath))
-			{
-				if (!Directory.Exists(oldAssetPath))
-				{
-					throw new Exception($"Loose meta file: {oldMetaPath}");
-				}
-				else if (!Directory.Exists(newAssetPath))
-				{
-					throw new Exception($"Loose meta file: {oldMetaPath}");
-				}
-				else
-				{
-					IdentifierMap.Map(oldGuid, newGuid);
-				}
-			}
-		}
+		return MetaFile.FromFile(Path.Combine(rootDirectory, relativePath)).Guid;
 	}
 }

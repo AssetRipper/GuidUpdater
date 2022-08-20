@@ -53,6 +53,10 @@ internal static class IdentifierMap
 			newPPtr = new PPtr(oldPPtr.FileID, newGuid, oldPPtr.Type);
 			return true;
 		}
+		else if (Scripts.ScriptMapper.TryGetReplacementPPtr(oldPPtr, out newPPtr))
+		{
+			return true;
+		}
 		else
 		{
 			newPPtr = oldPPtr;

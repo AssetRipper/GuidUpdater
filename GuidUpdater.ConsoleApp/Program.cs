@@ -16,7 +16,9 @@ public class Program
         Stopwatch sw = Stopwatch.StartNew();
         Console.WriteLine($"Old Assets Directory: {oldAssetsDirectory}");
         Console.WriteLine($"New Assets Directory: {newAssetsDirectory}");
-        GuidMapper.Map(oldAssetsDirectory, newAssetsDirectory);
+		PathMapper.Map(oldAssetsDirectory, newAssetsDirectory);
+		GuidMapper.Map();
+		Scripts.ScriptMapper.BuildMapping();
         sw.Stop();
         Console.WriteLine($"Guid mapping completed in {sw.Elapsed.TotalSeconds} seconds.");
         sw.Restart();

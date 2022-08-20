@@ -6,6 +6,8 @@ public readonly record struct UnityGuid(Guid SystemGuid)
 {
 	public override string ToString() => SystemGuid.ToString("n");
 
+	public static UnityGuid NewGuid() => new UnityGuid(Guid.NewGuid());
+
 	public static UnityGuid Parse(ReadOnlySpan<char> input)
 	{
 		return new UnityGuid(Guid.ParseExact(input, "n"));
