@@ -26,7 +26,6 @@ internal static class IdentifierMap
 	{
 		ThrowIfInvalidForMapping(oldPPtr);
 		ThrowIfInvalidForMapping(newPPtr);
-		Map(oldPPtr.Guid, newPPtr.Guid);
 		if (PPtrMap.TryGetValue(oldPPtr.ToData(), out PPtrData value))
 		{
 			if (value != newPPtr.ToData())
@@ -51,10 +50,6 @@ internal static class IdentifierMap
 		else if (GuidMap.TryGetValue(oldPPtr.Guid, out UnityGuid newGuid))
 		{
 			newPPtr = new PPtr(oldPPtr.FileID, newGuid, oldPPtr.Type);
-			return true;
-		}
-		else if (Scripts.ScriptMapper.TryGetReplacementPPtr(oldPPtr, out newPPtr))
-		{
 			return true;
 		}
 		else

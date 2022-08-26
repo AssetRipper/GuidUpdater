@@ -12,24 +12,10 @@ public static class ScriptMapper
 	public static readonly Dictionary<UnityGuid, Dictionary<long, FullName>> oldAssemblyGuids = new();
 	public static readonly Dictionary<FullName, UnityGuid> newScriptGuids = new();
 	public static readonly Dictionary<FullName, PPtr> newAssemblyGuids = new();
-	public static readonly Dictionary<PPtr, PPtr> mapping = new();
 
 	private static PPtr ToScriptPPtr(UnityGuid scriptGuid)
 	{
 		return new PPtr(MonoScriptMainID, scriptGuid, AssetType.Meta);
-	}
-
-	public static bool TryGetReplacementPPtr(PPtr oldPPtr, out PPtr newPPtr)
-	{
-		if (mapping.TryGetValue(oldPPtr, out newPPtr))
-		{
-			return true;
-		}
-		else
-		{
-			newPPtr = oldPPtr;
-			return false;
-		}
 	}
 
 	public static void RegisterOldScript(UnityGuid guid, string path)
@@ -75,16 +61,15 @@ public static class ScriptMapper
 
 	public static void BuildMapping()
 	{
-		mapping.Clear();
 		foreach ((UnityGuid guid, FullName fullName) in oldScriptGuids)
 		{
 			if (newScriptGuids.TryGetValue(fullName, out UnityGuid newGuid))
 			{
-				mapping.Add(ToScriptPPtr(guid), ToScriptPPtr(newGuid));
+				IdentifierMap.Map(ToScriptPPtr(guid), ToScriptPPtr(newGuid));
 			}
 			else if (newAssemblyGuids.TryGetValue(fullName, out PPtr newPPtr))
 			{
-				mapping.Add(ToScriptPPtr(guid), newPPtr);
+				IdentifierMap.Map(ToScriptPPtr(guid), newPPtr);
 			}
 		}
 		foreach ((UnityGuid guid, Dictionary<long, FullName> dictionary) in oldAssemblyGuids)
@@ -94,11 +79,11 @@ public static class ScriptMapper
 				PPtr pptr = new PPtr(fileID, guid, AssetType.Meta);
 				if (newScriptGuids.TryGetValue(fullName, out UnityGuid newGuid))
 				{
-					mapping.Add(pptr, ToScriptPPtr(newGuid));
+					IdentifierMap.Map(pptr, ToScriptPPtr(newGuid));
 				}
 				else if (newAssemblyGuids.TryGetValue(fullName, out PPtr newPPtr))
 				{
-					mapping.Add(pptr, newPPtr);
+					IdentifierMap.Map(pptr, newPPtr);
 				}
 			}
 		}
