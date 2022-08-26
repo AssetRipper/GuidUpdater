@@ -10,6 +10,7 @@ internal static class FilePaths
 	};
 	private static HashSet<string> IgnoredFileExtensions { get; } = new()
 	{
+		".asmdef",
 		".cs",
 		".dll",
 		".shader",
