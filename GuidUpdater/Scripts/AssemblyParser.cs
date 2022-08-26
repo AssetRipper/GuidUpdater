@@ -6,6 +6,15 @@ namespace GuidUpdater.Scripts;
 
 public static class AssemblyParser
 {
+	private static readonly HashSet<string> systemBaseTypes = new()
+	{
+		"System.Object",
+		"System.Enum",
+		"System.ValueType",
+		"System.Exception",
+		"System.Attribute",
+	};
+
 	public static HashSet<FullName> GetPotentialMonoBehavioursFromAssembly(string path)
 	{
 		HashSet<FullName> result = new();
@@ -24,7 +33,7 @@ public static class AssemblyParser
 
 	private static bool IsValidBaseType(ITypeDefOrRef? baseType)
 	{
-		return baseType is not null && baseType.FullName != "System.Object";
+		return baseType is not null && !systemBaseTypes.Contains(baseType.FullName.ToString());
 	}
 
 	public static int ComputeFileID(FullName fullName) => ComputeFileID(fullName.Namespace, fullName.Name);
