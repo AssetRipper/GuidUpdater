@@ -45,18 +45,16 @@ internal static class IdentifierMap
 		if (PPtrMap.TryGetValue(oldPPtr.ToData(), out PPtrData data))
 		{
 			newPPtr = data.ToPPtr(oldPPtr.Type);
-			return true;
 		}
 		else if (GuidMap.TryGetValue(oldPPtr.Guid, out UnityGuid newGuid))
 		{
 			newPPtr = new PPtr(oldPPtr.FileID, newGuid, oldPPtr.Type);
-			return true;
 		}
 		else
 		{
 			newPPtr = oldPPtr;
-			return false;
 		}
+		return oldPPtr != newPPtr;
 	}
 
 	public static PPtr GetNewPPtr(PPtr oldPPtr)
@@ -67,16 +65,8 @@ internal static class IdentifierMap
 
 	public static bool TryGetNewGuid(UnityGuid oldGuid, out UnityGuid newGuid)
 	{
-		if (GuidMap.TryGetValue(oldGuid, out UnityGuid value))
-		{
-			newGuid = value;
-			return true;
-		}
-		else
-		{
-			newGuid = oldGuid;
-			return false;
-		}
+		newGuid = GuidMap.TryGetValue(oldGuid, out UnityGuid value) ? value : oldGuid;
+		return newGuid != oldGuid;
 	}
 
 	private static void ThrowIfInvalidForMapping(PPtr pptr)

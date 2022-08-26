@@ -34,12 +34,14 @@ public static class ReferenceUpdater
 
 	private static void UpdateMetaFile(string path, out UnityGuid oldGuid)
 	{
+		bool modified = false;
 		MetaFile meta = MetaFile.FromFile(path);
 		oldGuid = meta.Guid;
 
 		if (IdentifierMap.TryGetNewGuid(oldGuid, out UnityGuid newGuid))
 		{
 			meta.Guid = newGuid;
+			modified = true;
 		}
 
 		if (meta.ImporterName == "NativeFormatImporter")
@@ -51,7 +53,11 @@ public static class ReferenceUpdater
 				PPtr pptr = new PPtr(long.Parse(fileIDString), oldGuid, AssetType.Serialized);
 				if (pptr.IsReplaceable)
 				{
-					fileIDNode.Value = IdentifierMap.GetNewPPtr(pptr.ToInterFile(oldGuid)).FileID.ToString();
+					if (IdentifierMap.TryGetNewPPtr(pptr.ToInterFile(oldGuid), out PPtr newPPtr))
+					{
+						fileIDNode.Value = newPPtr.FileID.ToString();
+						modified = true;
+					}
 				}
 			}
 		}
@@ -61,15 +67,23 @@ public static class ReferenceUpdater
 			PPtr pptr = node.PPtr;
 			if (pptr.IsReplaceable)
 			{
-				node.PPtr = IdentifierMap.GetNewPPtr(pptr.ToInterFile(oldGuid));
+				if (IdentifierMap.TryGetNewPPtr(pptr.ToInterFile(oldGuid), out PPtr newPPtr))
+				{
+					node.PPtr = newPPtr;
+					modified = true;
+				}
 			}
 		}
 
-		meta.Stream.SaveForUnity(false, path);
+		if (modified)
+		{
+			meta.Stream.SaveForUnity(true, path);
+		}
 	}
 
 	private static void UpdateAssetFile(string path, UnityGuid oldMetaGuid)
 	{
+		bool modified = false;
 		AssetFile file = AssetFile.FromFile(path);
 		foreach (UnityAsset asset in file.Assets)
 		{
@@ -78,12 +92,23 @@ public static class ReferenceUpdater
 				PPtr pptr = node.PPtr;
 				if (pptr.IsReplaceable)
 				{
-					node.PPtr = IdentifierMap.GetNewPPtr(pptr.ToInterFile(oldMetaGuid));
+					if (IdentifierMap.TryGetNewPPtr(pptr.ToInterFile(oldMetaGuid), out PPtr newPPtr))
+					{
+						node.PPtr = newPPtr;
+						modified = true;
+					}
 				}
 			}
 			PPtr assetPPtr = new PPtr(asset.FileID, oldMetaGuid, AssetType.Serialized);
-			asset.FileID = IdentifierMap.GetNewPPtr(assetPPtr).FileID;
+			if (IdentifierMap.TryGetNewPPtr(assetPPtr, out PPtr newAssetPPtr))
+			{
+				asset.FileID = newAssetPPtr.FileID;
+				modified = true;
+			}
 		}
-		file.Stream.SaveForUnity(true, path);
+		if (modified)
+		{
+			file.Stream.SaveForUnity(true, path);
+		}
 	}
 }
