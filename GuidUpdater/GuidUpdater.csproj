@@ -8,7 +8,7 @@
 	<ItemGroup>
 		<PackageReference Include="AsmResolver.DotNet" Version="5.5.0" />
 		<PackageReference Include="HarmonyX" Version="2.10.2" />
-		<PackageReference Include="YamlDotNet" Version="12.3.1" />
+		<PackageReference Include="YamlDotNet" Version="15.1.0" />
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" />
 	</ItemGroup>
 
