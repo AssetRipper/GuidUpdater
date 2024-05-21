@@ -1,0 +1,16 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:gu="using:GuidUpdater.UI"
+			 x:DataType="gu:CustomToolTip"
+			 x:Class="GuidUpdater.UI.CustomToolTip">
+	<Panel
+			ToolTip.Placement="Pointer"
+			ToolTip.ShowDelay="1000">
+		<ToolTip.Tip>
+			<TextBlock Text="{CompiledBinding Message}"/>
+		</ToolTip.Tip>
+		<Button Width="200" Height="100" Foreground="White" Background="Blue" Content="{CompiledBinding Message}"></Button>
+	</Panel>
+</UserControl>

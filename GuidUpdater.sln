@@ -26,9 +26,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{
 		.github\workflows\test.yml = .github\workflows\test.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuidUpdater.ConsoleAppTest", "GuidUpdater.ConsoleAppTest\GuidUpdater.ConsoleAppTest.csproj", "{327AE060-F4DC-429E-9F58-C0F35003E5DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuidUpdater.ConsoleAppTest", "GuidUpdater.ConsoleAppTest\GuidUpdater.ConsoleAppTest.csproj", "{327AE060-F4DC-429E-9F58-C0F35003E5DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreatePluginImporters", "CreatePluginImporters\CreatePluginImporters.csproj", "{BFC540BC-2AD5-4AB7-9261-5FDBF239D5B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CreatePluginImporters", "CreatePluginImporters\CreatePluginImporters.csproj", "{BFC540BC-2AD5-4AB7-9261-5FDBF239D5B0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuidUpdater.UI", "GuidUpdater.UI\GuidUpdater.UI.csproj", "{36B3B8F8-EB21-49B2-8F88-1D9FAB56BF36}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,6 +58,10 @@ Global
 		{BFC540BC-2AD5-4AB7-9261-5FDBF239D5B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFC540BC-2AD5-4AB7-9261-5FDBF239D5B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFC540BC-2AD5-4AB7-9261-5FDBF239D5B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36B3B8F8-EB21-49B2-8F88-1D9FAB56BF36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36B3B8F8-EB21-49B2-8F88-1D9FAB56BF36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36B3B8F8-EB21-49B2-8F88-1D9FAB56BF36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36B3B8F8-EB21-49B2-8F88-1D9FAB56BF36}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

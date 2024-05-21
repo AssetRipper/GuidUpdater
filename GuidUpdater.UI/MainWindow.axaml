@@ -1,0 +1,30 @@
+<Window xmlns="https://github.com/avaloniaui"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:cc="using:GuidUpdater.UI"
+		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		x:Class="GuidUpdater.UI.MainWindow"
+		Title="GuidUpdater.UI">
+
+	<StackPanel Spacing="5">
+		<TextBlock Classes="h1">Welcome to GuidUpdater!</TextBlock>
+		<Rectangle Fill="Red" Height="84" RadiusX="10" RadiusY="10"/>
+		<Rectangle Fill="Blue" Height="84" RadiusX="10" RadiusY="10"/>
+		<Rectangle Fill="Green" Height="84" RadiusX="10" RadiusY="10"/>
+		<Rectangle Fill="Orange" Height="84" RadiusX="10" RadiusY="10"/>
+		<Button Name="button">Click Me!</Button>
+		<Panel
+			ToolTip.Placement="Pointer"
+			ToolTip.ShowDelay="1000">
+			<ToolTip.Tip>
+				<StackPanel>
+					<TextBlock Classes="h1">ToolTip</TextBlock>
+					<TextBlock Classes="h2">A control which pops up a hint when a control is hovered</TextBlock>
+				</StackPanel>
+			</ToolTip.Tip>
+			<Button Width="200" Height="100" Foreground="White" Background="Red">White text, red background</Button>
+		</Panel>
+		<cc:CustomToolTip/>
+	</StackPanel>
+</Window>
